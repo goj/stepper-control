@@ -1,0 +1,7 @@
+/atmega/main.elf
+/atmega/main.hex
+/cli/camera-control
+/cli/mock-camera-control
+board/$nikon-mover.sch
+board/nikon-mover.bak
+*.o
