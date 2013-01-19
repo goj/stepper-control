@@ -5,9 +5,12 @@
 
 DEVICE  = atmega8
 F_CPU   = 16000000	# in Hz
-FUSE_L  = 0x9f# see below for fuse values for particular devices
+# see below for fuse values for particular devices
+FUSE_L  = 0x9f
 FUSE_H  = 0xc9
-AVRDUDE = avrdude -c usbasp -p $(DEVICE) -B500 # edit this line for your programmer
+BAUD_RATE =
+# BAUD_RATE = -B500
+AVRDUDE = avrdude -c usbasp -p $(DEVICE) $(BAUD_RATE) # edit this line for your programmer
 
 CFLAGS  = -Iusbdrv -I. -DDEBUG_LEVEL=0
 OBJECTS = usbdrv/usbdrv.o usbdrv/usbdrvasm.o usbdrv/oddebug.o main.o

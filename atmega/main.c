@@ -45,7 +45,10 @@ const PROGMEM char usbHidReportDescriptor[22] = {    /* USB report descriptor */
  * instead.
  */
 
-char *last_error = "no error";
+static int request_count = 0;
+static volatile int adc_count = 0;
+static volatile int temperature = 0;
+static char *last_error = "no error";
 
 /* ------------------------------------------------------------------------- */
 
@@ -59,14 +62,33 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
     /* default for not implemented requests: return no data back to host */
     if((rq->bmRequestType & USBRQ_TYPE_MASK) != USBRQ_TYPE_VENDOR)
         return 0;
+    ++request_count;
     switch (rq->bRequest) {
         case REQ_GET_STATUS:
-            return 0;
+            dataBuffer[0] = (request_count >> 8) & 0xFF;
+            dataBuffer[1] = (request_count >> 0) & 0xFF;
+            dataBuffer[2] = STEPPER_X_PORT_OUTPUT >> STEPPER_X_SHIFT;
+            dataBuffer[3] = 0; // STEPPER_Y_PORT_OUTPUT >> STEPPER_Y_SHIFT;
+            dataBuffer[4] = (temperature >> 8) & 0xFF;
+            dataBuffer[5] = (temperature >> 0) & 0xFF;
+            usbMsgPtr = (uchar*) dataBuffer;
+            return 6;
         case REQ_DEBUG:
             size = sprintf(dataBuffer,
+                           "Request No: %d\n"
                            "Stepper X: %d\n"
+                           "ADCH: %d\n"
+                           "ADCL: %d\n"
+                           "temperature: %d\n"
+                           "adc_count: %d\n"
                            "Last error: %s\n",
-                           STEPPER_X_PORT_OUTPUT, last_error);
+                           request_count,
+                           STEPPER_X_PORT_OUTPUT,
+                           ADCH,
+                           ADCL,
+                           temperature,
+                           adc_count,
+                           last_error);
             usbMsgPtr = (uchar*) dataBuffer;
             return size + 1;
         case REQ_SET_X:
@@ -79,6 +101,13 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
     }
 }
 
+#if 1
+ISR(ADC_vect) {
+    temperature = ((ADCH & 0x3) << 8) | (ADCL & 0xFF);
+    ++adc_count;
+}
+#endif
+
 
 uchar usbFunctionWrite(uchar *data, uchar len)
 {
@@ -89,7 +118,7 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 
 int __attribute__((noreturn)) main(void)
 {
-uchar   i;
+    uchar i;
 
     wdt_enable(WDTO_1S);
     /* Even if you don't use the watchdog, turn it off here. On newer devices,
@@ -102,7 +131,7 @@ uchar   i;
     usbInit();
     usbDeviceDisconnect();  /* enforce re-enumeration, do this while interrupts are disabled! */
     i = 0;
-    while(--i) {             /* fake USB disconnect for > 250 ms */
+    while (--i) {             /* fake USB disconnect for > 250 ms */
         wdt_reset();
         _delay_ms(1);
     }
@@ -110,10 +139,15 @@ uchar   i;
 
     // set output ports
     STEPPER_X_PORT_DDR |= STEPPER_X_DDR_MASK;
+    ADMUX = 0x0; // input on ADC0, use AREF, right adjust the result
+    ADCSRA = _BV(ADEN) | _BV(ADFR) | _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);
+    // enable ADC, free running mode, set prescaler to 128
+    ADCSRA |= _BV(ADIE); // enable interrupts
+    ADCSRA |= _BV(ADSC); // turn on the conversion
 
     sei();
 
-    for(;;) {                /* main event loop */
+    for (;;) {
         wdt_reset();
         usbPoll();
     }

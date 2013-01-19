@@ -7,6 +7,8 @@
 #include "../atmega/requests.h"
 #include "../atmega/usbconfig.h"
 
+#define STATUS_MSG_SIZE 6
+
 #define TIMEOUT 5000
 #ifdef DEBUG
 #define SHOW_WARNINGS 1
@@ -55,24 +57,36 @@ usb_dev_handle* stepper_connect() {
     return handle;
 }
 
-void stepper_status(usb_dev_handle* handle, int *x, int *y) {
+int stepper_status(usb_dev_handle* handle, int *no, int *x, int *y, int *temp) {
+    char bytes[STATUS_MSG_SIZE];
+    int encoded_temp;
+    int cnt = in_request(handle, REQ_GET_STATUS, 0, bytes, STATUS_MSG_SIZE);
+    if (cnt != STATUS_MSG_SIZE)
+        return cnt;
+    if (no) *no = (bytes[0] << 8) | bytes[1];
+    if (x) *x = bytes[2];
+    if (y) *y = bytes[3];
+    encoded_temp = (bytes[4] << 8) | bytes[5];
+    if (temp) *temp = encoded_temp; // TODO: convert to ℃
+    return 0;
 }
 
-void stepper_debug(usb_dev_handle* handle, char* buffer, int buf_size) {
-    in_request(handle, REQ_DEBUG, 0, buffer, buf_size);
+int stepper_debug(usb_dev_handle* handle, char* buffer, int buf_size) {
+    int cnt = in_request(handle, REQ_DEBUG, 0, buffer, buf_size);
     buffer[buf_size-1] = '\0';
+    return cnt > 0 ? 0 : cnt;
 }
 
-void stepper_set_x(usb_dev_handle* handle, int x) {
-    out_request(handle, REQ_SET_X, x, "", 0);
+int stepper_set_x(usb_dev_handle* handle, int x) {
+    return out_request(handle, REQ_SET_X, x, "", 0);
 }
 
-void stepper_set_y(usb_dev_handle* handle, int y) {
-    out_request(handle, REQ_SET_Y, y, "", 0);
+int stepper_set_y(usb_dev_handle* handle, int y) {
+    return out_request(handle, REQ_SET_Y, y, "", 0);
 }
 
-void stepper_disconnect(usb_dev_handle* handle) {
-    usb_close(handle);
+int stepper_disconnect(usb_dev_handle* handle) {
+    return usb_close(handle);
 }
 
 static int usb_request(usb_dev_handle *dev, int request, int dir, int value, char *bytes, int size)

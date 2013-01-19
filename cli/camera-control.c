@@ -3,23 +3,28 @@
 #include <stdlib.h>
 #include <string.h>
 #include "stepper.h"
+#include "../atmega/requests.h"
 
 static void usage(char *name)
 {
     fprintf(stderr, "usage:\n");
-    fprintf(stderr, "  %s status ... get the device status\n", name);
-    fprintf(stderr, "  %s set_x X .. set the X stepper\n", name);
-    fprintf(stderr, "  %s set_y X .. set the Y stepper\n", name);
-    fprintf(stderr, "  %s debug .... print debug info\n", name);
+    fprintf(stderr, "  %s status ..... get the device status\n", name);
+    fprintf(stderr, "  %s set_x X .... set the X stepper\n", name);
+    fprintf(stderr, "  %s set_y X .... set the Y stepper\n", name);
+    fprintf(stderr, "  %s debug ...... print debug info\n", name);
+    fprintf(stderr, "  %s get_temp ... get the temperature\n", name);
 }
 
-void print_status(int x, int y) {
-    printf("engine status: X@%d, Y@%d\n", x, y);
+void print_status(int request_no, int x, int y, int temp) {
+    printf("Request %d\n", request_no);
+    printf("Engine status: X=%d, Y=%d\n", x, y);
+    printf("Temperature: %d℃\n", temp);
 }
 
 int main(int argc, char **argv)
 {
     usb_dev_handle *handle;
+    int err = 0;
 
     if (argc < 2) {
         usage(argv[0]);
@@ -34,21 +39,29 @@ int main(int argc, char **argv)
     }
 
     if (strcasecmp(argv[1], "status") == 0) {
-        int x, y;
-        stepper_status(handle, &x, &y);
-        print_status(x, y);
+        int request_no, x, y, temp;
+        err = stepper_status(handle, &request_no, &x, &y, &temp);
+        if (!err) {
+            print_status(request_no, x, y, temp);
+        }
     } else if (strcasecmp(argv[1], "set_x") == 0 && argc == 3) {
-        stepper_set_x(handle, atoi(argv[2]));
+        err = stepper_set_x(handle, atoi(argv[2]));
     } else if (strcasecmp(argv[1], "set_y") == 0 && argc == 3) {
-        stepper_set_y(handle, atoi(argv[2]));
+        err = stepper_set_y(handle, atoi(argv[2]));
     } else if(strcasecmp(argv[1], "debug") == 0) {
         const int buf_size = 256;
         char buf[buf_size];
-        stepper_debug(handle, buf, buf_size);
-        fputs(buf, stdout);
-    } else{
+        err = stepper_debug(handle, buf, buf_size);
+        if (!err) {
+            fputs(buf, stdout);
+        }
+    } else {
         usage(argv[0]);
-        exit(1);
+    }
+    if (err) {
+        stepper_disconnect(handle);
+        fprintf(stderr, "Unexpected error (code %d)\n", err);
+        return err;
     }
     stepper_disconnect(handle);
     return 0;

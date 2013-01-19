@@ -1,0 +1,17 @@
+#!/bin/sh
+PAUSE=0.05
+turn() {
+    ./camera-control set_x $1
+    ./camera-control status
+    sleep $PAUSE
+}
+
+halfstep_r() {
+    for pos in 1 5 4 6 2 10 8 9; do
+        turn $pos
+    done
+}
+
+while ((1)); do
+    halfstep_r
+done

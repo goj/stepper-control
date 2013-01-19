@@ -2,29 +2,35 @@
 #include <string.h>
 #include "stepper.h"
 
-void coffemaker_init_usb() {
-}
-
 usb_dev_handle* stepper_connect() {
     return (usb_dev_handle*) 0xDE71CE;
 }
 
-void stepper_status(usb_dev_handle* hndl, int *x, int *y) {
-    *x = 42;
-    *y = 7;
+static int request_no = 0;
+
+int stepper_status(usb_dev_handle* hndl, int *no, int *x, int *y, int *temp) {
+    if (no) *no = ++request_no;
+    if (x) *x = 42;
+    if (y) *y = 7;
+    if (temp) *temp = 36;
+    return 0;
 }
 
-void stepper_debug(usb_dev_handle* hndl, char* buf, int buf_size) {
+int stepper_debug(usb_dev_handle* hndl, char* buf, int buf_size) {
     strcpy(buf, "fake debug info");
+    return 0;
 }
 
-void stepper_set_x(usb_dev_handle* hndl, int x) {
+int stepper_set_x(usb_dev_handle* hndl, int x) {
     printf("setting fake X: %d\n", x);
+    return 0;
 }
 
-void stepper_set_y(usb_dev_handle* hndl, int y) {
+int stepper_set_y(usb_dev_handle* hndl, int y) {
     printf("setting fake Y: %d\n", y);
+    return 0;
 }
 
-void stepper_disconnect(usb_dev_handle* hndl) {
+int stepper_disconnect(usb_dev_handle* hndl) {
+    return 0;
 }
