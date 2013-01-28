@@ -2,6 +2,7 @@
 /atmega/main.hex
 /cli/camera-control
 /cli/mock-camera-control
+/cli/fast-rotate
 board/$nikon-mover.sch
 board/nikon-mover.bak
 *.o

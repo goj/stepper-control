@@ -47,7 +47,6 @@ const PROGMEM char usbHidReportDescriptor[22] = {    /* USB report descriptor */
 
 static int request_count = 0;
 static volatile int adc_count = 0;
-static volatile int temperature = 0;
 static char *last_error = "no error";
 
 /* ------------------------------------------------------------------------- */
@@ -69,24 +68,20 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
             dataBuffer[1] = (request_count >> 0) & 0xFF;
             dataBuffer[2] = STEPPER_X_PORT_OUTPUT >> STEPPER_X_SHIFT;
             dataBuffer[3] = 0; // STEPPER_Y_PORT_OUTPUT >> STEPPER_Y_SHIFT;
-            dataBuffer[4] = (temperature >> 8) & 0xFF;
-            dataBuffer[5] = (temperature >> 0) & 0xFF;
             usbMsgPtr = (uchar*) dataBuffer;
-            return 6;
+            return 4;
         case REQ_DEBUG:
             size = sprintf(dataBuffer,
                            "Request No: %d\n"
                            "Stepper X: %d\n"
                            "ADCH: %d\n"
                            "ADCL: %d\n"
-                           "temperature: %d\n"
                            "adc_count: %d\n"
                            "Last error: %s\n",
                            request_count,
                            STEPPER_X_PORT_OUTPUT,
                            ADCH,
                            ADCL,
-                           temperature,
                            adc_count,
                            last_error);
             usbMsgPtr = (uchar*) dataBuffer;
@@ -100,14 +95,6 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
             return 0;
     }
 }
-
-#if 1
-ISR(ADC_vect) {
-    temperature = ((ADCH & 0x3) << 8) | (ADCL & 0xFF);
-    ++adc_count;
-}
-#endif
-
 
 uchar usbFunctionWrite(uchar *data, uchar len)
 {
@@ -139,11 +126,6 @@ int __attribute__((noreturn)) main(void)
 
     // set output ports
     STEPPER_X_PORT_DDR |= STEPPER_X_DDR_MASK;
-    ADMUX = 0x0; // input on ADC0, use AREF, right adjust the result
-    ADCSRA = _BV(ADEN) | _BV(ADFR) | _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);
-    // enable ADC, free running mode, set prescaler to 128
-    ADCSRA |= _BV(ADIE); // enable interrupts
-    ADCSRA |= _BV(ADSC); // turn on the conversion
 
     sei();
 

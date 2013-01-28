@@ -8,11 +8,10 @@ usb_dev_handle* stepper_connect() {
 
 static int request_no = 0;
 
-int stepper_status(usb_dev_handle* hndl, int *no, int *x, int *y, int *temp) {
+int stepper_status(usb_dev_handle* hndl, int *no, int *x, int *y) {
     if (no) *no = ++request_no;
     if (x) *x = 42;
     if (y) *y = 7;
-    if (temp) *temp = 36;
     return 0;
 }
 

@@ -23,14 +23,11 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    int temperature;
     for (turn = 0; turn < NUM_ROTATIONS; turn++) {
         for (x = 0; x < STEPS_SIZE; x++) {
             stepper_set_x(handle, steps[x]);
             usleep(SLEEP_TIME);
         }
-        /* stepper_status(handle, NULL, NULL, NULL, &temperature); */
-        /* printf("temperature: %d\n", temperature); */
         usleep(SLEEP_TIME);
     }
     stepper_set_x(handle, 0);

@@ -15,10 +15,9 @@ static void usage(char *name)
     fprintf(stderr, "  %s get_temp ... get the temperature\n", name);
 }
 
-void print_status(int request_no, int x, int y, int temp) {
+void print_status(int request_no, int x, int y) {
     printf("Request %d\n", request_no);
     printf("Engine status: X=%d, Y=%d\n", x, y);
-    printf("Temperature: %d℃\n", temp);
 }
 
 int main(int argc, char **argv)
@@ -39,10 +38,10 @@ int main(int argc, char **argv)
     }
 
     if (strcasecmp(argv[1], "status") == 0) {
-        int request_no, x, y, temp;
-        err = stepper_status(handle, &request_no, &x, &y, &temp);
+        int request_no, x, y;
+        err = stepper_status(handle, &request_no, &x, &y);
         if (!err) {
-            print_status(request_no, x, y, temp);
+            print_status(request_no, x, y);
         }
     } else if (strcasecmp(argv[1], "set_x") == 0 && argc == 3) {
         err = stepper_set_x(handle, atoi(argv[2]));

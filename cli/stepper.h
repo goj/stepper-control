@@ -5,7 +5,7 @@
 
 int stepper_init_usb();
 usb_dev_handle* stepper_connect();
-int stepper_status(usb_dev_handle*, int*, int*, int*, int*);
+int stepper_status(usb_dev_handle*, int*, int*, int*);
 int stepper_debug(usb_dev_handle*, char*, int);
 int stepper_set_x(usb_dev_handle*, int);
 int stepper_set_y(usb_dev_handle*, int);

@@ -7,7 +7,7 @@
 #include "../atmega/requests.h"
 #include "../atmega/usbconfig.h"
 
-#define STATUS_MSG_SIZE 6
+#define STATUS_MSG_SIZE 4
 
 #define TIMEOUT 5000
 #ifdef DEBUG
@@ -57,17 +57,14 @@ usb_dev_handle* stepper_connect() {
     return handle;
 }
 
-int stepper_status(usb_dev_handle* handle, int *no, int *x, int *y, int *temp) {
+int stepper_status(usb_dev_handle* handle, int *no, int *x, int *y) {
     char bytes[STATUS_MSG_SIZE];
-    int encoded_temp;
     int cnt = in_request(handle, REQ_GET_STATUS, 0, bytes, STATUS_MSG_SIZE);
     if (cnt != STATUS_MSG_SIZE)
         return cnt;
     if (no) *no = (bytes[0] << 8) | bytes[1];
     if (x) *x = bytes[2];
     if (y) *y = bytes[3];
-    encoded_temp = (bytes[4] << 8) | bytes[5];
-    if (temp) *temp = encoded_temp; // TODO: convert to ℃
     return 0;
 }
 
