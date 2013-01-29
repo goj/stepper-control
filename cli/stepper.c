@@ -58,8 +58,8 @@ usb_dev_handle* stepper_connect() {
 }
 
 int stepper_status(usb_dev_handle* handle, int *no, int *x, int *y) {
-    char bytes[STATUS_MSG_SIZE];
-    int cnt = in_request(handle, REQ_GET_STATUS, 0, bytes, STATUS_MSG_SIZE);
+    unsigned char bytes[STATUS_MSG_SIZE];
+    int cnt = in_request(handle, REQ_GET_STATUS, 0, (char*)bytes, STATUS_MSG_SIZE);
     if (cnt != STATUS_MSG_SIZE)
         return cnt;
     if (no) *no = (bytes[0] << 8) | bytes[1];
