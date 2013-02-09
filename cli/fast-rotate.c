@@ -26,6 +26,7 @@ int main(int argc, char **argv)
     for (turn = 0; turn < NUM_ROTATIONS; turn++) {
         for (x = 0; x < STEPS_SIZE; x++) {
             stepper_set_x(handle, steps[x]);
+            stepper_set_y(handle, steps[x]);
             usleep(SLEEP_TIME);
         }
         usleep(SLEEP_TIME);

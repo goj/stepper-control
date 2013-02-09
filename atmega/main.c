@@ -10,6 +10,11 @@
 #define STEPPER_X_DDR_MASK        (_BV(5) | _BV(4) | _BV(3) | _BV(2))
 #define STEPPER_X_SHIFT           2u
 
+#define STEPPER_Y_PORT_OUTPUT     PORTB
+#define STEPPER_Y_PORT_DDR        DDRB
+#define STEPPER_Y_DDR_MASK        (_BV(5) | _BV(4) | _BV(3) | _BV(2))
+#define STEPPER_Y_SHIFT           2u
+
 #include <stdio.h>
 #include <string.h>
 #include <avr/io.h>
@@ -67,19 +72,21 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
             dataBuffer[0] = (request_count >> 8) & 0xFF;
             dataBuffer[1] = (request_count >> 0) & 0xFF;
             dataBuffer[2] = STEPPER_X_PORT_OUTPUT >> STEPPER_X_SHIFT;
-            dataBuffer[3] = 0; // STEPPER_Y_PORT_OUTPUT >> STEPPER_Y_SHIFT;
+            dataBuffer[3] = STEPPER_Y_PORT_OUTPUT >> STEPPER_Y_SHIFT;
             usbMsgPtr = (uchar*) dataBuffer;
             return 4;
         case REQ_DEBUG:
             size = sprintf(dataBuffer,
                            "Request No: %d\n"
                            "Stepper X: %d\n"
+                           "Stepper Y: %d\n"
                            "ADCH: %d\n"
                            "ADCL: %d\n"
                            "adc_count: %d\n"
                            "Last error: %s\n",
                            request_count,
                            STEPPER_X_PORT_OUTPUT,
+                           STEPPER_Y_PORT_OUTPUT,
                            ADCH,
                            ADCL,
                            adc_count,
@@ -90,6 +97,7 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
             STEPPER_X_PORT_OUTPUT = rq->wValue.word << STEPPER_X_SHIFT;
             return 0;
         case REQ_SET_Y:
+            STEPPER_Y_PORT_OUTPUT = rq->wValue.word << STEPPER_Y_SHIFT;
             return 0;
         default:
             return 0;
@@ -126,6 +134,7 @@ int __attribute__((noreturn)) main(void)
 
     // set output ports
     STEPPER_X_PORT_DDR |= STEPPER_X_DDR_MASK;
+    STEPPER_Y_PORT_DDR |= STEPPER_Y_DDR_MASK;
 
     sei();
 
