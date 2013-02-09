@@ -1,0 +1,191 @@
+# EESchema Netlist Version 1.1 created  Wed 30 Jan 2013 22:06:30 CET
+(
+ ( /50EB2103 C2 C1 22pF
+  ( 1 GND )
+  ( 2 N-000037 )
+ )
+ ( /50EB20FE C2 C2 22pF
+  ( 1 GND )
+  ( 2 N-000036 )
+ )
+ ( /50EB1E2B C2 C3 10uF
+  ( 1 VCC )
+  ( 2 GND )
+ )
+ ( /50EB2AB3 C2 C4 100nF
+  ( 1 VCC )
+  ( 2 GND )
+ )
+ ( /50EB2A0D D4 D1 3.6V
+  ( 1 GND )
+  ( 2 N-000004 )
+ )
+ ( /5102C470 D4 D2 3.6V
+  ( 1 GND )
+  ( 2 N-000035 )
+ )
+ ( /50EB1DDD DIP-28__300 IC1 ATMEGA8-P
+  ( 1 ? )
+  ( 2 N-000023 )
+  ( 3 ? )
+  ( 4 N-000024 )
+  ( 5 ? )
+  ( 6 ? )
+  ( 7 VCC )
+  ( 8 GND )
+  ( 9 N-000037 )
+  ( 10 N-000036 )
+  ( 11 ? )
+  ( 12 ? )
+  ( 13 ? )
+  ( 14 ? )
+  ( 15 ? )
+  ( 16 N-000026 )
+  ( 17 N-000030 )
+  ( 18 N-000017 )
+  ( 19 N-000039 )
+  ( 20 VCC )
+  ( 21 ? )
+  ( 22 GND )
+  ( 23 ? )
+  ( 24 ? )
+  ( 25 N-000005 )
+  ( 26 N-000027 )
+  ( 27 N-000028 )
+  ( 28 N-000029 )
+ )
+ ( /50EB1EAD USB_B J1 USB
+  ( 1 VCC )
+  ( 2 N-000004 )
+  ( 3 N-000035 )
+  ( 4 GND )
+  ( 5 ? )
+  ( 6 ? )
+ )
+ ( /5106ED04 SIL-5 P1 CONN_5
+  ( 1 N-000031 )
+  ( 2 N-000002 )
+  ( 3 N-000032 )
+  ( 4 N-000003 )
+  ( 5 N-000001 )
+ )
+ ( /5106ED0A SIL-5 P2 CONN_5
+  ( 1 N-000021 )
+  ( 2 N-000033 )
+  ( 3 N-000022 )
+  ( 4 N-000034 )
+  ( 5 N-000001 )
+ )
+ ( /51081D88 SIL-2 P3 CONN_2
+  ( 1 N-000001 )
+  ( 2 GND )
+ )
+ ( /51098A56 SIL-1 P4 CONN_1
+  ( 1 VCC )
+ )
+ ( /5102C5ED R4 R1 4.7kΩ
+  ( 1 N-000004 )
+  ( 2 GND )
+ )
+ ( /5102C5E8 R4 R2 2.2kΩ
+  ( 1 N-000004 )
+  ( 2 VCC )
+ )
+ ( /50EB1E08 R4 R3 68Ω
+  ( 1 N-000023 )
+  ( 2 N-000004 )
+ )
+ ( /5102C22C R4 R4 68Ω
+  ( 1 N-000024 )
+  ( 2 N-000035 )
+ )
+ ( /50EB2711 DIP-18__300_ELL U1 ULN2803
+  ( 1 N-000029 )
+  ( 2 N-000028 )
+  ( 3 N-000027 )
+  ( 4 N-000005 )
+  ( 5 N-000039 )
+  ( 6 N-000017 )
+  ( 7 N-000030 )
+  ( 8 N-000026 )
+  ( 9 GND )
+  ( 10 N-000001 )
+  ( 11 N-000031 )
+  ( 12 N-000002 )
+  ( 13 N-000032 )
+  ( 14 N-000003 )
+  ( 15 N-000021 )
+  ( 16 N-000033 )
+  ( 17 N-000022 )
+  ( 18 N-000034 )
+ )
+ ( /50EB1E4A C2 X1 16MHz
+  ( 1 N-000036 )
+  ( 2 N-000037 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C1
+ SM*
+ C?
+ C1-1
+$endlist
+$component C2
+ SM*
+ C?
+ C1-1
+$endlist
+$component C3
+ CP*
+ SM*
+$endlist
+$component C4
+ SM*
+ C?
+ C1-1
+$endlist
+$component D1
+ D?
+ SO*
+ SM*
+$endlist
+$component D2
+ D?
+ SO*
+ SM*
+$endlist
+$component IC1
+ 28DIP-ELL600
+ 28dip600
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$endfootprintlist
+}

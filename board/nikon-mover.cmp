@@ -1,0 +1,129 @@
+Cmp-Mod V01 Created by CvPcb (2012-jan-04)-stable date = Wed 30 Jan 2013 22:06:30 CET
+
+BeginCmp
+TimeStamp = /50EB2103;
+Reference = C1;
+ValeurCmp = 22pF;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB20FE;
+Reference = C2;
+ValeurCmp = 22pF;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB1E2B;
+Reference = C3;
+ValeurCmp = 10uF;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB2AB3;
+Reference = C4;
+ValeurCmp = 100nF;
+IdModule  = C2;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB2A0D;
+Reference = D1;
+ValeurCmp = 3.6V;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /5102C470;
+Reference = D2;
+ValeurCmp = 3.6V;
+IdModule  = D4;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB1DDD;
+Reference = IC1;
+ValeurCmp = ATMEGA8-P;
+IdModule  = DIP-28__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB1EAD;
+Reference = J1;
+ValeurCmp = USB;
+IdModule  = USB_B;
+EndCmp
+
+BeginCmp
+TimeStamp = /5106ED04;
+Reference = P1;
+ValeurCmp = CONN_5;
+IdModule  = SIL-5;
+EndCmp
+
+BeginCmp
+TimeStamp = /5106ED0A;
+Reference = P2;
+ValeurCmp = CONN_5;
+IdModule  = SIL-5;
+EndCmp
+
+BeginCmp
+TimeStamp = /51081D88;
+Reference = P3;
+ValeurCmp = CONN_2;
+IdModule  = SIL-2;
+EndCmp
+
+BeginCmp
+TimeStamp = /51098A56;
+Reference = P4;
+ValeurCmp = CONN_1;
+IdModule  = SIL-1;
+EndCmp
+
+BeginCmp
+TimeStamp = /5102C5ED;
+Reference = R1;
+ValeurCmp = 4.7kΩ;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /5102C5E8;
+Reference = R2;
+ValeurCmp = 2.2kΩ;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB1E08;
+Reference = R3;
+ValeurCmp = 68Ω;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /5102C22C;
+Reference = R4;
+ValeurCmp = 68Ω;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB2711;
+Reference = U1;
+ValeurCmp = ULN2803;
+IdModule  = DIP-18__300_ELL;
+EndCmp
+
+BeginCmp
+TimeStamp = /50EB1E4A;
+Reference = X1;
+ValeurCmp = 16MHz;
+IdModule  = C2;
+EndCmp
+
+EndListe
