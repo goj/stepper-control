@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+STOP=99
+
+start() {
+        echo starting usbip
+        usbipd -D
+        usbip bind --`usbip list -p -l | grep '#usbid=04b0:0428#' | cut '-d#' -f1`
+}
+
+stop() {
+        echo stopping usbip
+        usbip unbind --`usbip list -p -l | grep '#usbid=04b0:0428#' | cut '-d#' -f1`
+        killall usbipd
+}
