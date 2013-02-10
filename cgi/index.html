@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<title>Camera Control</title>
+<style type="text/css">
+    a {
+        display: block;
+        text-align: center;
+    }
+    #control-canvas {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid black;
+    }
+</style>
+<script type="text/javascript">
+    function request(what) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/cgi-bin/camera-control/' + what, true);
+        xhr.send();
+    }
+
+    function main() {
+        var canvas = document.getElementById("control-canvas");
+        var x12 = Math.floor(canvas.width / 2) + 1;
+        var y12 = Math.floor(canvas.height / 2) + 1;
+        var ctx = canvas.getContext("2d");
+        ctx.save();
+        ctx.globalAlpha = 0.5;
+        ctx.moveTo(x12, 0);
+        ctx.lineTo(x12, canvas.height);
+        ctx.stroke();
+        ctx.moveTo(0, y12);
+        ctx.lineTo(canvas.width, y12);
+        ctx.stroke();
+        ctx.restore();
+
+        canvas.onclick = function(e) {
+            var dx = e.clientX - x12;
+            var dy = e.clientY - y12;
+            request('turn?x=' + dx + '&y=' + dy);
+        }
+    }
+</script>
+<meta charset="utf-8"/>
+</head>
+<body onload="main()">
+    <canvas width="321" height="321" id="control-canvas">
+        Sorry, no canvas in your lousy browser.
+    </canvas>
+    <a href="javascript:request('off')">off</a>
+</body>
+</html>
