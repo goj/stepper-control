@@ -22,23 +22,22 @@
     }
 
     function main() {
+        function drawLine(x0, y0, x1, y1) {
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
+            ctx.stroke();
+        }
         var canvas = document.getElementById("control-canvas");
         var x12 = Math.floor(canvas.width / 2) + 1;
         var y12 = Math.floor(canvas.height / 2) + 1;
         var ctx = canvas.getContext("2d");
-        ctx.save();
         ctx.globalAlpha = 0.5;
-        ctx.moveTo(x12, 0);
-        ctx.lineTo(x12, canvas.height);
-        ctx.stroke();
-        ctx.moveTo(0, y12);
-        ctx.lineTo(canvas.width, y12);
-        ctx.stroke();
-        ctx.restore();
+        drawLine(x12, 0, x12, canvas.height);
+        drawLine(0, y12, canvas.width, y12);
 
         canvas.onclick = function(e) {
-            var dx = e.clientX - x12;
-            var dy = e.clientY - y12;
+            var dx = e.offsetX - x12;
+            var dy = e.offsetY - y12;
             request('turn?x=' + dx + '&y=' + dy);
         }
     }

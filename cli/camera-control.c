@@ -5,7 +5,7 @@
 #include "stepper.h"
 #include "../atmega/requests.h"
 
-#define USLEEP_TIME 1000
+#define USLEEP_TIME 10000
 
 // This program is sorta-kinda Simonyi - Hungarian.
 // The convention through this code is that _msk suffix for variable
@@ -28,19 +28,16 @@ void usage(char *name) {
     fprintf(stderr, "  %s turn dx dy ... turn the camera by (dx, dy) and hold.\n", name);
 }
 
-
-/* void tmp() { */
-/*     for (turn = 0; turn < NUM_ROTATIONS; turn++) { */
-/*         for (x = 0; x < STEPS_SIZE; x++) { */
-/*             stepper_set_x(handle, steps[x]); */
-/*             stepper_set_y(handle, steps[x]); */
-/*             usleep(USLEEP_TIME); */
-/*         } */
-/*         usleep(USLEEP_TIME); */
-/*     } */
-/*     stepper_set_x(handle, 0); */
-/*     stepper_set_y(handle, 0); */
-/* } */
+#ifdef DEBUG
+void show_position(char axis, int pos) {
+    int i;
+    for (i = 0; i < STEPS_SIZE; i++)
+        putchar(i == pos ? axis : '.');
+    putchar('\n');
+}
+#else
+#define show_position(axis, pos)
+#endif
 
 int idx_from_msk(int msk) {
     int idx;
@@ -96,11 +93,13 @@ void turn_camera(usb_dev_handle *handle, int dx, int dy) {
             ++x;
             slope_err -= dy;
             x_idx = idx_add(x_idx, x_dir);
+            show_position('X', x_idx);
             stepper_set_x(handle, steps[x_idx]);
         } else if (y < dy && slope_err <= 0) {
             ++y;
             slope_err += dx;
             y_idx = idx_add(y_idx, y_dir);
+            show_position('Y', y_idx);
             stepper_set_y(handle, steps[y_idx]);
         } else {
             break;

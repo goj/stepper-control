@@ -16,7 +16,7 @@ CC		= gcc
 CFLAGS	= $(CPPFLAGS) $(USBFLAGS) -O -g -Wall -DDEBUG
 LIBS	= $(USBLIBS)
 
-all: camera-control mock-camera-control fast-rotate
+all: camera-control mock-camera-control fast-rotate api-test
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
@@ -30,5 +30,8 @@ mock-camera-control: camera-control.o $(MOCK_OBJECTS)
 fast-rotate: fast-rotate.o $(STD_OBJECTS)
 	$(CC) -o $@ $^ $(LIBS)
 
+api-test: api-test.o $(STD_OBJECTS)
+	$(CC) -o $@ $^ $(LIBS)
+
 clean:
-	rm -f *.o camera-control mock-camera-control fast-rotate
+	rm -f *.o camera-control mock-camera-control fast-rotate api-test

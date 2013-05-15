@@ -14,8 +14,8 @@ case $COMMAND in
     NO_TURNX=${COMMAND##turn?x=}
     X=${NO_TURNX%&y=*}
     Y=${NO_TURNX##*&y=}
-    X=$(echo $X | grep '[-]\?[0-9]\+')
-    Y=$(echo $Y | grep '[-]\?[0-9]\+')
+    X=$(echo $X | grep -o '[-]\?[0-9]\+')
+    Y=$(echo $Y | grep -o '[-]\?[0-9]\+')
     camera-control turn $X $Y
     ;;
   *)
