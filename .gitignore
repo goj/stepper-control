@@ -3,6 +3,7 @@
 /cli/camera-control
 /cli/mock-camera-control
 /cli/fast-rotate
+/cli/api-test
 /board/$nikon-mover.*
 /board/*.bak
 /board/*.000
