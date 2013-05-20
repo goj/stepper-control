@@ -82,6 +82,10 @@ int stepper_set_y(usb_dev_handle* handle, int y) {
     return out_request(handle, REQ_SET_Y, y, "", 0);
 }
 
+int stepper_rest(usb_dev_handle* handle) {
+    return out_request(handle, REQ_REST, 0, "", 0);
+}
+
 int stepper_disconnect(usb_dev_handle* handle) {
     return usb_close(handle);
 }

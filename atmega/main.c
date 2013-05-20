@@ -51,7 +51,7 @@ const PROGMEM char usbHidReportDescriptor[22] = {    /* USB report descriptor */
  */
 
 static int request_count = 0;
-static volatile int adc_count = 0;
+static int x_bits = 0, y_bits = 0;
 static char *last_error = "no error";
 
 /* ------------------------------------------------------------------------- */
@@ -71,33 +71,37 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
         case REQ_GET_STATUS:
             dataBuffer[0] = (request_count >> 8) & 0xFF;
             dataBuffer[1] = (request_count >> 0) & 0xFF;
-            dataBuffer[2] = STEPPER_X_PORT_OUTPUT >> STEPPER_X_SHIFT;
-            dataBuffer[3] = STEPPER_Y_PORT_OUTPUT >> STEPPER_Y_SHIFT;
+            dataBuffer[2] = x_bits;
+            dataBuffer[3] = y_bits;
             usbMsgPtr = (uchar*) dataBuffer;
             return 4;
         case REQ_DEBUG:
             size = sprintf(dataBuffer,
                            "Request No: %d\n"
+                           "Requested X: %d\n"
+                           "Requested Y: %d\n"
                            "Stepper X: %d\n"
                            "Stepper Y: %d\n"
-                           "ADCH: %d\n"
-                           "ADCL: %d\n"
-                           "adc_count: %d\n"
                            "Last error: %s\n",
                            request_count,
+                           x_bits,
+                           y_bits,
                            STEPPER_X_PORT_OUTPUT,
                            STEPPER_Y_PORT_OUTPUT,
-                           ADCH,
-                           ADCL,
-                           adc_count,
                            last_error);
             usbMsgPtr = (uchar*) dataBuffer;
             return size + 1;
         case REQ_SET_X:
-            STEPPER_X_PORT_OUTPUT = rq->wValue.word << STEPPER_X_SHIFT;
+            x_bits = rq->wValue.word;
+            STEPPER_X_PORT_OUTPUT = x_bits << STEPPER_X_SHIFT;
             return 0;
         case REQ_SET_Y:
-            STEPPER_Y_PORT_OUTPUT = rq->wValue.word << STEPPER_Y_SHIFT;
+            y_bits = rq->wValue.word;
+            STEPPER_Y_PORT_OUTPUT = y_bits << STEPPER_Y_SHIFT;
+            return 0;
+        case REQ_REST:
+            STEPPER_X_PORT_OUTPUT = 0;
+            STEPPER_Y_PORT_OUTPUT = 0;
             return 0;
         default:
             return 0;

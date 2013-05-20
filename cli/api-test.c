@@ -11,6 +11,7 @@ static void usage(char *name)
     fprintf(stderr, "  %s status ..... get the device status\n", name);
     fprintf(stderr, "  %s set_x X .... set the X stepper\n", name);
     fprintf(stderr, "  %s set_y X .... set the Y stepper\n", name);
+    fprintf(stderr, "  %s rest ....... make the stepper rest\n", name);
     fprintf(stderr, "  %s debug ...... print debug info\n", name);
 }
 
@@ -46,8 +47,10 @@ int main(int argc, char **argv)
         err = stepper_set_x(handle, atoi(argv[2]));
     } else if (strcasecmp(argv[1], "set_y") == 0 && argc == 3) {
         err = stepper_set_y(handle, atoi(argv[2]));
+    } else if (strcasecmp(argv[1], "rest") == 0 && argc == 2) {
+        err = stepper_rest(handle);
     } else if(strcasecmp(argv[1], "debug") == 0) {
-        const int buf_size = 256;
+        const int buf_size = 255;
         char buf[buf_size];
         err = stepper_debug(handle, buf, buf_size);
         if (!err) {

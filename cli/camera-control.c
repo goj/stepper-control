@@ -96,6 +96,8 @@ void turn_camera(usb_dev_handle *handle, int X, int Y) {
     // and on the y change otherwise. This way steps in
     // the "less popular" direction occur "in parallel"
     // with the steps in "more popular" one.
+    // We choose the sleep time so that we have a constant
+    // speed in taxi metric no matter the direction.
     int x_sleep, y_sleep;
     if (X > Y) {
         x_sleep = USLEEP_TIME * (X+Y) / X;
@@ -123,6 +125,7 @@ void turn_camera(usb_dev_handle *handle, int X, int Y) {
             break;
         }
     }
+    stepper_rest(handle);
 }
 
 int main(int argc, char **argv)

@@ -30,6 +30,11 @@ int stepper_set_y(usb_dev_handle* hndl, int y) {
     return 0;
 }
 
+int stepper_rest(usb_dev_handle* hndl) {
+    printf("setting stepper to rest\n");
+    return 0;
+}
+
 int stepper_disconnect(usb_dev_handle* hndl) {
     return 0;
 }

@@ -31,8 +31,7 @@ int main(int argc, char **argv)
         }
         usleep(SLEEP_TIME);
     }
-    stepper_set_x(handle, 0);
-    stepper_set_y(handle, 0);
+    stepper_rest(handle);
     stepper_disconnect(handle);
     return 0;
 }
